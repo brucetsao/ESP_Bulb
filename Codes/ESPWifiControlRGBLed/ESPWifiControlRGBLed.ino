@@ -2,11 +2,11 @@
 #include "Pinset.h"
 #include <WiFi.h>
 
-WiFiClient client;
+
 
 
 // Set web server port number to 80
-WiFiServer server(80);
+WiFiServer server(8080);
 // NeoPixel Ring simple sketch (c) 2013 Shae Erisson
 // released under the GPLv3 license to match the rest of the AdaFruit NeoPixel library
 #include <Adafruit_NeoPixel.h>
@@ -30,16 +30,18 @@ void setup() {
   WiFi.softAP(APid, APpwd);
 
   IPAddress IP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
+  Serial.print("\n\nAP IP address: ");
   Serial.println(IP);
         server.begin();
+  // client = server.available();       
     delay(initDelayTime) ;   //wait 2 seconds
      DebugMsgln("Waiting for Wifi APPs Connection") ;
 }
 
 
-void loop() {
-   WiFiClient client = server.available();
+void loop() 
+{
+  WiFiClient client = server.available();
    readok = false ;
   // put your main code here, to run repeatedly:
   if (Serial.available() >0)
@@ -62,7 +64,7 @@ void loop() {
 
     Serial.println("new client");
     // an http request ends with a blank line
-    boolean currentLineIsBlank = true;
+    //boolean currentLineIsBlank = true;
     while (client.connected())
       {
     //    Serial.print("client connected  in while");
@@ -137,11 +139,11 @@ void loop() {
             }
        // Serial.println("client disonnected");
     }   //end of while (client.connected())
-
+      Serial.println("Waiting for Receiving") ;
   }   //  end of  if (client)
 
 
-
+      Serial.println("Waiting for Connecting") ;
   //------------------------------------------
   
 }
@@ -252,6 +254,11 @@ void initAll()
     Serial.begin(9600);
      Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
   Serial.println("System Start") ;  
+    //-------------------
+    MacData = GetMacAddress() ;
+    ChangeAPName() ;
+
+
     pixels.begin();
   pixels.setBrightness(255);  // Lower brightness and save eyeballs!
   pixels.show(); // Initialize all pixels to 'off'
@@ -271,10 +278,9 @@ void initAll()
           }
  
 
-      DebugMsgln("Clear Bluetooth Buffer") ;
-    //  ClearBluetoothBuffer() ;
-    MacData = GetMacAddress() ;
-    getAPname() ;
+      DebugMsgln("Clear Buffer") ;
+   
+
 }
 
 String GetMacAddress() {
@@ -307,7 +313,18 @@ String  print2HEX(int number) {
   return ttt ;
 }
 
-void getAPname()
+
+void ChangeAPName()
 {
-   // *(APid+0) =   
+
+  Serial.print("Inner Changeapname:(") ;
+  Serial.print(NewAPname) ;
+  Serial.print("/") ;
+  NewAPname.concat(MacData.substring(6,12)) ;  
+  Serial.print(NewAPname) ;
+  Serial.print("/") ;
+  strcpy(&APid[0],&NewAPname[0]) ;
+  Serial.print(APid) ;
+  Serial.print("\n") ;
+ 
 }

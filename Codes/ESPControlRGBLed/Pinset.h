@@ -1,7 +1,7 @@
 #define _Debug 1
 #define TestLed 1
 #include <String.h>
-#define WSPIN            15
+#define WSPIN            4
 #define NUMPIXELS      16
 #define RXD2 16
 #define TXD2 17

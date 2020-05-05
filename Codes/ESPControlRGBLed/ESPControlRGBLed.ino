@@ -1,12 +1,13 @@
-
+#include <String.h>
 #include "Pinset.h"
 #include <WiFi.h>
 String connectstr ;
 String MacData ;
+char Macchar[12] ;
 WiFiClient client;
 
 // Replace with your network credentials
-char* APid = "BLUB1234" ;
+char* APid = "BLUB123456" ;
 //char APid[8] ;
 char* APpwd = "12345678";
 // Set web server port number to 80
@@ -224,7 +225,19 @@ void initAll()
 
     Serial.begin(9600);
      Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);
-  Serial.println("System Start") ;  
+  Serial.println("System Start") ; 
+  //-------------------
+    Serial.print("Ap Original Name :(");
+    Serial.print(APid);
+    Serial.print(")\n");
+    MacData = GetMacAddress() ;
+    ChangeAPName(APid) ;
+    Serial.print("Ap name is changed:(");
+    Serial.print(APid);
+    Serial.print(")\n");
+    while(true);
+
+   //---------------------
     pixels.begin();
   pixels.setBrightness(255);  // Lower brightness and save eyeballs!
   pixels.show(); // Initialize all pixels to 'off'
@@ -246,8 +259,7 @@ void initAll()
 
       DebugMsgln("Clear Bluetooth Buffer") ;
     //  ClearBluetoothBuffer() ;
-    MacData = GetMacAddress() ;
-    getAPname() ;
+
 }
 
 String GetMacAddress() {
@@ -280,7 +292,27 @@ String  print2HEX(int number) {
   return ttt ;
 }
 
-void getAPname()
+
+
+void ChangeAPName(char *pp)
 {
-   // *(APid+0) =   
+  Serial.print("Inner Changeapname:(") ;
+  Serial.print(pp) ;
+  Serial.print("/") ;
+  Serial.print(MacData) ;
+  Serial.print(")\n") ;
+//  MacData.toCharArray(Macchar,12) ;
+  MacData.toCharArray(Macchar,12) ;
+  memcpy(pp+6, &Macchar[6], 6)
+  /*
+   for(int i = 0; i<6;i++)
+    {
+      Serial.print("***") ;
+      Serial.print(*(pp+4+i)) ;
+      Serial.print("/") ;
+      Serial.print(Macchar[6+i]) ;
+      Serial.print("***\n") ;
+       *(pp+4+i) = Macchar[6+i] ;
+    }
+    */
 }

@@ -1,7 +1,7 @@
 #define _Debug 1
 #define TestLed 1
 #include <String.h>
-#define WSPIN            15
+#define WSPIN            4
 #define NUMPIXELS      16
 #define RXD2 16
 #define TXD2 17
@@ -9,10 +9,11 @@ long strtime ;
 String connectstr ;
 String MacData ;
 // Replace with your network credentials
-char* APid = "BLUB1234" ;
-//char APid[8] ;
+//char* APid[13] = "BLUB1234" ;
+char APid[16] ;
 char* APpwd = "12345678";
 byte RedValue = 0, GreenValue = 0, BlueValue = 0;
+String NewAPname ="BLUB" ;
 String ReadStr = "      " ;
 int delayval = 500; // delay for half a second
 boolean readok = false ;
